@@ -4,126 +4,12 @@ Record my kaggle experiences.
 ## [House Pricing](https://github.com/WuZifan/KaggleRecords/tree/master/House%20Prices)
 
 
-### 第一次尝试
+### [第一次尝试](https://github.com/WuZifan/KaggleRecords/blob/master/House%20Prices/House_Pricing.ipynb)
 
-#### 第一次流程回顾
+### [第二次尝试](https://github.com/WuZifan/KaggleRecords/blob/master/House%20Prices/House_Pricing2.ipynb)
 
-简单回顾一下我们第一个kaggle比赛是怎么做的：
+### [第三次尝试](https://github.com/WuZifan/KaggleRecords/blob/master/House%20Prices/House_Pricing3.ipynb)
 
-* 0）提取数据
-    
-    0. 在原始的数据中，id也是一个特征，而这个特征与我们的结果无关，因此在提取数据时需要将这个特征舍弃。
-
-* 1）label值——Y的处理
-
-    1. 对于训练数据，我们将特征和label分离，得到train_x和train_y.
-    
-    2. 对于label，我们通过绘图发现它有一点长尾的样子，而这不利于回归，因此我们通过log的方式将其变的比较符合正态分布。
-
-* 2）category数据的发现和one-hot编码
-    
-    3. 因为训练集的特征和测试集的特征都需要做处理，因此将两部分特征结合起来。
-    
-    4. 对结合在一起的特征，我们首先根据description将用数字表示的category特征转化为str类型
-    
-    5. 接着对所有非数字类型的特征（即category类型特征）做one-hot编码。
-
-* 3）numerical数据的Nan值处理。（填充只是一种方法，还可以进行剔除，视为新值和填充三种方法）
-    
-    6. 然后，对所有数字类型的特征，首先我们用每个特征的均值取填充其中的NaN值。
-
-* 4）numerical数据的归一化。
-    
-    7. 然后，对每个特征，将该特征的均值归一化到0，方差归一化到1.（y-ymean)/ystd
-    
-    8. 完成后，将训练样本和测试样本分开。
-    
-* 5）模型的构造与超参数的选择。
-    
-    9. 我们选择三个简单的模型（LR,LASSO,RIDGE），利用cross-validation来寻找最优超参数。
-    
-    10. 在sklearn自带的如LassoCV中，cross-validation的评分标准是mean-square-errors,cv的方法是leave-one-out cv方法。
-    
-    11. 在自己编写的cross-validation中，用的是r2评分标准，而自己编写的cv就显然没有做处理，用直接看模型在全体训练集上面的优劣。
-
-* 6）ensemble各个弱模型。
-    
-    12. 在得到最优之后，我们通过stacking的方式（对每个回归器的值求和取均值）来得到最后结果。
-    
-    13. 之前的y值经过log处理，现在需要通过exp来将其转回去。
-    
-#### 第一次问题发现
-
-在跑完第一次的整个流程之后，根据比赛结果我们发现了这么几个问题：
-
-    1. 在自己编写cross-validation的时候，没有将样本正确的分成若干份，而是一次性全部进行cross-validtion。
-    
-    2. 不同模型的cross-validation采用的是不同的评分标准，而且也和比赛最终要求的评分标准不同。
-    
-    3. 将预测的y值通过exp转回去后，有很多结果超过上限，变成了inf。
-    
-    4. 所选的模型太简单。
-
-改进：
-
-    1. 查阅资料发现比赛用的是RMSE来作为评分，即ROOT-MEAN-SQUAER-ERROR。
-    
-    2. 采用一些稍微复杂的模型，比如random-forest等等。
-    
-    3. 在上面步骤完成后，查看inf生成原因，用一些特殊值代替inf。
-
-### 第二次尝试
-
-#### 第二次流程回顾
-第二次流程在之前的数据处理环节上和第一次都一样，改变的主要是这些地方：
-
-* 1）模型选择。
-
-    1. 在这里，同样选择了Linear-Regression,Lasso和Ridge三种回归模型。
-
-* 2）参数选择。
-
-    2. 自定义了超参数的范围，根据之前的经验，对Lasso选择在0~0.3范围内，取100个值；对Ridge选择在0~15范围内，取100个值。
-    
-    3. cross-validation采用的是K-fold Cross Validation方法，k=10.
-    
-    4. 评价采用的是mean-square-error，符合比赛的要求。
-
-* 3）结果判定。
-
-    5. 对cross-validation从mean-square-error的结果上来看，linear-regression的结果要好于lasso和ridge的结果。
-    
-    6. 但观察,linear-regression，lasso和ridge的预测结果来看，linear-regression明显发生了overfitting。
-    
-    7. linear-regression的overfitting同时也解释了对于lasso而言，为什么alpha越小其成绩越好。
-
-* 4）ensemble。
-
-    8. 这个环节采用的还是stacking的方式，求每个回归器的平均值。
-    
-    9. 由于linear-regression产生了较为严重的过拟合，最后不予使用，即，只采用lasso和ridge两者的stacking。
-    
-#### 第二次流程问题
-
-第二次流程的基本没有什么问题了，kaggle上反馈模型在测试集上的结果，其mse大概在0.1304左右，不错了。
-
-接下来可以考虑使用其他模型，比如randoforest，bagging以及boost方法的模型，来做初始模型，最后再用ensemble。
-
-### 第三次尝试
-
-第三次尝试用了这么几种模型：
-
-    1. randomforest，利用grid-search来搜寻最优树的颗数和特征数。
-    
-    2. bagging，调优过的ridge作为base-model
-    
-    3. adaboost，自带的tree作为base-model
-    
-    4. xgboost，自带的tree作为base-model
-    
- 呃，最后的结果没有lasso+ridge的好，应该是我没有把ridge作为base-model传入adaboost和xgboost把= - 
-    
-    
     
     
     
