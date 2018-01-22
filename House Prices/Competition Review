@@ -1,5 +1,8 @@
 ## [House Pricing](https://github.com/WuZifan/KaggleRecords/tree/master/House%20Prices)
 
+PS:文件夹中的几个ipython文件对应的就是几次不同的模型。
+   几个csv文件就是输出结果。
+   input里面有比赛给的数据和数据描述。
 
 ### 第一次尝试
 
