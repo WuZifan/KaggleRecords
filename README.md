@@ -10,10 +10,11 @@ Record my kaggle experiences.
 
 ### 1.3 [第三次尝试](https://github.com/WuZifan/KaggleRecords/blob/master/House%20Prices/House_Pricing3.ipynb)
 
-    
-    
-    
-    
+
+## 2. [Titanic](https://github.com/WuZifan/KaggleRecords/tree/master/Titanic)
+
+### 2.1 [第一次尝试](https://github.com/WuZifan/KaggleRecords/blob/master/Titanic/Titanic1.ipynb)
+  
     
     
     
