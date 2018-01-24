@@ -3,3 +3,6 @@
 
 # ignore README.md
 README.md
+
+# ignore .csv
+*.csv
