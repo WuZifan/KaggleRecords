@@ -14,6 +14,8 @@ Record my kaggle experiences.
 ## 2. [Titanic](https://github.com/WuZifan/KaggleRecords/tree/master/Titanic)
 
 ### 2.1 [第一次尝试](https://github.com/WuZifan/KaggleRecords/blob/master/Titanic/Titanic1.ipynb)
+
+### 2.2 [第二次尝试](https://github.com/WuZifan/KaggleRecords/blob/master/Titanic/Titanic1.ipynb)
   
     
     
